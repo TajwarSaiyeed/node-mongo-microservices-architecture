@@ -1,11 +1,12 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const blacklisttokenModel = require("../models/blacklisttoken.model")
 
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const user = await userModels.findOne({
+    const user = await userModel.findOne({
       email,
     });
 
@@ -35,9 +36,11 @@ const register = async (req, res) => {
       }
     );
 
-    req.cookie("token", token);
+    res.cookie("token", token);
 
     res.status(201).json({
+      token,
+      user: newUser,
       message: "User created successfully",
     });
   } catch (error) {
