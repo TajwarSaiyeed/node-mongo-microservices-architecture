@@ -2,8 +2,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
 const app = express();
-const connect = require("./db/connect");
-connect();
+const connectDB = require("./db/connect");
+const rabbitmq = require("./service/rabbit");
+connectDB();
+rabbitmq.connect();
 const cookieParser = require("cookie-parser");
 const rideRoutes = require("./routes/ride.routes");
 
