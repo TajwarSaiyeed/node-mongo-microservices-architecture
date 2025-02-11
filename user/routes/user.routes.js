@@ -5,6 +5,7 @@ const {
   login,
   logout,
   profile,
+  acceptedRide,
 } = require("../controllers/user.controller");
 
 const userAuth = require("../middlewares/authMiddleware");
@@ -14,5 +15,11 @@ router.post("/login", login);
 router.get("/logout", logout);
 // logged in user profile
 router.get("/profile", userAuth, profile);
+router.get(
+  "/accepted-ride",
+  userAuth,
+  acceptedRide
+);
+
 
 module.exports = router;

@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const userRoutes = require("./routes/user.routes");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./db/connect");
-require("dotenv").config();
 const rabbitmq = require("./service/rabbit");
 connectDB();
 rabbitmq.connect();

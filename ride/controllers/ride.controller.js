@@ -1,4 +1,5 @@
 const rideModel = require("../models/ride.modal");
+const { publishToQueue } = require("../service/rabbit");
 
 module.exports.createRide = async (req, res, next) => {
   const { pickup, destination } = req.body;
@@ -10,6 +11,7 @@ module.exports.createRide = async (req, res, next) => {
   });
 
   await newRide.save();
+  publishToQueue("new-ride", JSON.stringify(newRide));
   res.send(newRide);
 };
 
@@ -22,5 +24,6 @@ module.exports.acceptRide = async (req, res, next) => {
 
   ride.status = "accepted";
   await ride.save();
+  publishToQueue("ride-accepted", JSON.stringify(ride));
   res.send(ride);
 };

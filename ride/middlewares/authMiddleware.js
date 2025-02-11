@@ -29,6 +29,7 @@ module.exports.userAuth = async (req, res, next) => {
     const response = await axios.get(`${process.env.BASE_URL}/user/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     const user = response.data;
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -36,6 +37,7 @@ module.exports.userAuth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };

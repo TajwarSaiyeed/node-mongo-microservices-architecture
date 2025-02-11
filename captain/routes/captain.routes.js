@@ -6,6 +6,7 @@ const {
   logout,
   profile,
   toggleAvailability,
+  waitForNewRide
 } = require("../controllers/captain.controller");
 
 const captainAuth = require("../middlewares/authMiddleware");
@@ -20,5 +21,6 @@ router.patch(
   captainAuth,
   toggleAvailability
 );
+router.get("/new-ride", captainAuth, waitForNewRide);
 
 module.exports = router;
