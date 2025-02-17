@@ -1,0 +1,90 @@
+name: nodejs_microservice
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - nodejs_microservice
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    ports:
+      - "3000:3000"
+    networks:
+      - nodejs_microservice
+    depends_on:
+      - mongo
+    volumes:
+      - ./gateway:/app/app
+      - /app/node_modules
+    command: npm start
+
+  user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    container_name: user
+    ports:
+      - "3001:3001"
+    networks:
+      - nodejs_microservice
+    depends_on:
+      - mongo
+    env_file:
+      - ./user/.env
+    volumes:
+      - ./user:/server
+      - /server/node_modules
+    command: npm start
+
+  captain:
+    build:
+      context: ./captain
+      dockerfile: Dockerfile
+    container_name: captain
+    ports:
+      - "3002:3002"
+    networks:
+      - nodejs_microservice
+    depends_on:
+      - mongo
+    env_file:
+      - ./captain/.env
+    volumes:
+      - ./captain:/server
+      - /server/node_modules
+    command: npm start
+
+  ride:
+    build:
+      context: ./ride
+      dockerfile: Dockerfile
+    container_name: ride
+    ports:
+      - "3003:3003"
+    networks:
+      - nodejs_microservice
+    depends_on:
+      - mongo
+    env_file:
+      - ./ride/.env
+    volumes:
+      - ./ride:/server
+      - /server/node_modules
+    command: npm start
+
+volumes:
+  mongo_data:
+
+networks:
+  nodejs_microservice:
+    driver: bridge
+
